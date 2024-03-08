@@ -1,0 +1,123 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+    Property
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+            <!-- Search Start -->
+        <div class="container-fluid bg-primary mb-5 wow fadeIn" data-wow-delay="0.1s" style="padding: 35px;">
+            <div class="container">
+                <div class="row g-2">
+                    <div class="col-md-10">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control border-0 py-3" placeholder="Search Keyword">
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select border-0 py-3">
+                                    <option selected>Property Type</option>
+                                    {% for property_type in property_types %}
+                                        <option value="{{ property_type.id }}">{{ property_type.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select border-0 py-3">
+                                    <option selected>Location</option>
+                                    {% for property in properties %}
+                                        <option value="{{ property.id }}">{{ property.location }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-dark border-0 w-100 py-3" type="submit" >Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Search End -->
+
+
+        <!-- Property List Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row g-0 gx-5 align-items-end">
+                    <div class="container mt-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-8 text-center">
+                                <h1 class="display-4 mb-3">Welcome to Our Real Estate Platform</h1>
+                                <p class="lead">Discover a diverse range of available properties for rent. Whether you're an admin overseeing listings or someone searching for the perfect home, our platform is designed to cater to your needs.</p>
+                                <p class="lead">Explore the listings, view detailed property information, and make informed decisions about your next home. As an admin, you have the power to manage and showcase properties seamlessly. For those looking to rent, find the ideal house that suits your preferences.</p>
+                                <p class="text-muted">If you have any questions or need assistance, please don't hesitate to reach out to our support team.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-content">
+                    <div id="tab-1" class="tab-pane fade show p-0 active">
+                        <div class="row g-4">
+                            {% for property in properties %}
+                            <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                <div class="property-item rounded overflow-hidden">
+                                    <div class="position-relative overflow-hidden">
+                                        <a href=""><img class="img-fluid" src="{% static 'img/property-1.jpg' %}" alt=""></a>
+                                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">For Renting</div>
+                                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">{{ property.property_type }}</div>
+                                    </div>
+                                    <div class="p-4 pb-0">
+                                        <a class="d-block h5 mb-2" href="">{{ property.name }}</a>
+                                        <h5 class="text-primary mb-3">{{ property.price }}</h5>
+                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>{{ property.location }}</p>
+                                    </div>
+                                    <div class="d-flex border-top">
+                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-ruler-combined text-primary me-2"></i>1000 Sqft</small>
+                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>{{ property.bedrooms }} bedrooms</small>
+                                        <small class="flex-fill text-center py-2"><i class="fa fa-bath text-primary me-2"></i>{{ property.bathrooms }} bathrooms</small>
+                                        <small class="flex-fill text-center py-2"><i class="fa fa-home text-primary me-2"></i>{{ property.number_available }} available</small>
+                                    </div>
+                                </div>
+                                <div class="d-grid">
+                                    <div class="row">
+                                        <div class="col">
+                                            <a class="cat-item btn btn-primary d-block text-center rounded p-3" href="{% url 'edit_property' property_id=property.id %}">
+                                                <i class="fa fa-edit" title="Edit Property Type"></i>Edit
+                                            </a>
+                                        </div>
+                                        <div class="col">
+                                            <a class="cat-item btn btn-danger d-block text-center rounded p-3" href="{% url 'delete_property' property_id=property.id %}">
+                                                <i class="fa fa-edit" title="Delete Property"></i>Delete
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            {% empty %}
+                                <div class="col-12 text-center">
+                                    <p class="text-muted">No properties found.</p>
+                                </div>
+                            {% endfor %}
+
+                            <div class="col-12 text-center">
+                                <a class="btn btn-primary py-3 px-5" href="{% url 'home' %}">Browse More Property</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Property List End -->
+</div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}

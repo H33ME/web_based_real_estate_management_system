@@ -1,0 +1,86 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Add Property
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Add Property Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Add Property</h2>
+                        <form action="{% url 'add_property' %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="property_type" class="form-label">Property Type</label>
+                                <select class="form-select" id="property_type" name="property_type" required>
+                                    <option selected disabled>Select Property Type</option>
+                                    {% for property_type in property_types %}
+                                        <option value="{{ property_type.id }}">{{ property_type.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Property Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" name="description" id="description" rows="10" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" name="location" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Price</label>
+                                <select class="form-select" id="price" name="price" required>
+                                    <option selected disabled>Select Price</option>
+                                    {% for property in properties %}
+                                        <option value="{{ property.price }}">{{ property.price }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="bedrooms" class="form-label">Bedrooms</label>
+                                <select class="form-select" id="bedrooms" name="bedrooms" required>
+                                    <option selected disabled>Select Bedrooms</option>
+                                    {% for choice in BEDROOM_CHOICES %}
+                                        <option value="{{ choice.0 }}">{{ choice.0 }} - {{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="bathrooms" class="form-label">Bathrooms</label>
+                                <select class="form-select" id="bathrooms" name="bathrooms" required>
+                                    <option selected disabled>Select Bathrooms</option>
+                                    {% for choice in BATHROOM_CHOICES %}
+                                        <option value="{{ choice.0 }}">{{ choice.0 }} - {{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="number_available" class="form-label">Property Available </label>
+                                <input type="number" class="form-control" id="number_available" name="number_available" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Add Property</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Property Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}

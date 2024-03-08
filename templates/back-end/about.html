@@ -1,0 +1,43 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+    About
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+<!-- About Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <div class="about-img position-relative overflow-hidden p-5 pe-0">
+                    <img class="img-fluid w-100" src="{% static 'img/about.jpg' %}" alt="About Image">
+                </div>
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                <h1 class="mb-4">#1 Platform to Discover Your Dream Property</h1>
+                <p class="mb-4">
+                    Our Real Estate Management System is a comprehensive platform designed to simplify and streamline the management of real estate properties. It provides a centralized solution for property owners, managers, and tenants to efficiently handle various aspects of property management. With our system, property owners can easily list their properties, track their financials, and communicate with tenants. Property managers have access to a range of tools to handle maintenance requests, rent collection, and lease management. Tenants can conveniently search for available properties, submit maintenance requests, and make rental payments.
+
+                </p>
+
+                <p><i class="fa fa-check text-primary me-3"></i>Property Listing: Easily list and showcase properties with detailed descriptions, photos, and pricing information.</p>
+                <p><i class="fa fa-check text-primary me-3"></i>Tenant Management: Efficiently manage tenant applications, lease agreements, and communicate with tenants.</p>
+                <p><i class="fa fa-check text-primary me-3"></i>Financial Tracking: Monitor property financials, including rent payments, expenses, and generate reports.</p>
+                <a class="btn btn-primary py-3 px-5 mt-3" href="{% url 'property' %}">View Available Property</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- About End -->
+</div>
+</div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}
