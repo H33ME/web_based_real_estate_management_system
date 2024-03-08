@@ -1,0 +1,40 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Edit Property Type
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Edit Property Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Edit Property Type</h2>
+                        <form action="{% url 'edit_property_type' property_type_id=property_type.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Property Type Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>                                                                                                                      
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Edit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Property Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}
