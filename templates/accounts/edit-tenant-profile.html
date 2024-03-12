@@ -1,0 +1,68 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Edit Tenant Information
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Edit User Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Edit Tenant Information</h2>
+                        <form action="{% url 'edit_tenant_profile' tenant_id=user.tenant.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{ phone_number }}" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="occupation" class="form-label">Occupation</label>
+                                <select class="form-select" id="occupation" name="occupation" required>
+                                    <option selected disabled>Select Occupation</option>
+                                    {% for choice in occupation_choices %}
+                                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="identification_number" class="form-label">Identification Number</label>
+                                <input type="number" class="form-control" id="identification_number" name="identification_number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                <input type="number" class="form-control" id="emergency_contact" name="emergency_contact" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Edit User Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}

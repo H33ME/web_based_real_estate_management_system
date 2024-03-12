@@ -1,0 +1,79 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Register Tenant
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Register Tenant Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Tenant Registration Form</h2>
+                        <form action="{% url 'register_tenant' %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username (Email)</label>
+                                <input type="email" class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="occupation" class="form-label">Occupation</label>
+                                <select class="form-select" id="occupation" name="occupation" required>
+                                    <option selected disabled>Select Occupation</option>
+                                    {% for choice in occupation_choices %}
+                                            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="identification_number" class="form-label">Identification Number</label>
+                                <input type="text" class="form-control" id="identification_number" name="identification_number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phone_number" name="phone_number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password1" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password1" name="password1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password2" class="form-label">Confirm Password</label>
+                                <input type="password" class="form-control" id="password2" name="password2" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                <input type="text" class="form-control" id="emergency_contact" name="emergency_contact" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Register</button>
+                            </div>
+                            <div class="text-center">
+                            <a href="{% url 'login' %}">Already have an account? Login here.</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Register Tenant Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}

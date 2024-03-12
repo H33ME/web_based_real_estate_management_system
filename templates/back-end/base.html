@@ -64,26 +64,48 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <div class="navbar-nav ms-auto">
-                        <a href="{% url 'home' %}" class="nav-item nav-link active">Home</a>
-                        <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Property</a>
-                            <div class="dropdown-menu rounded-0 m-0">
-                                <a href="{% url 'property' %}" class="dropdown-item">Property List</a>
-                                <a href="{% url 'property_type' %}" class="dropdown-item">Property Type</a>
-                                <a href="property-agent.html" class="dropdown-item">Property Agent</a>
+                        <a href="{% url 'home' %}" class="nav-item nav-link {% if request.path == '/' %}active{% endif %}">Home</a>
+                        {% if user.is_authenticated %}
+                            {% if user.tenant %}
+                                <div class="nav-item dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Profile</a>
+                                    <div class="dropdown-menu rounded-0 m-0">
+                                        <a href="{% url 'edit_tenant_profile' tenant_id=user.tenant.id %}" class="dropdown-item">Edit Profile</a>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Property</a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="{% url 'property' %}" class="dropdown-item {% if request.path == '/property/' %}active{% endif %}">Property List</a>
+                                    {% if user.is_superuser %}
+                                        <a href="{% url 'property_type' %}" class="dropdown-item {% if request.path == '/property_type/' %}active{% endif %}">Property Type</a>
+                                    {% endif %}
+                                    {% if user.tenant %}
+                                        <a href="{% url 'property_rented' %}" class="dropdown-item {% if request.path == '/property_rented/' %}active{% endif %}">Property Rented</a>
+                                    {% endif %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                            <div class="dropdown-menu rounded-0 m-0">
-                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-                                <a href="404.html" class="dropdown-item">404 Error</a>
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                                </div>
                             </div>
-                        </div>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
+                        {% else %}
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                                <div class="dropdown-menu rounded-0 m-0">
+                                    <a href="{% url 'login' %}" class="dropdown-item {% if request.path == '/login/' %}active{% endif %}">Login</a>
+                                    <a href="{% url 'register_tenant' %}" class="dropdown-item {% if request.path == '/register_tenant/' %}active{% endif %}">Register</a>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <a href="{% url 'about' %}" class="nav-item nav-link {% if request.path == '/about/' %}active{% endif %}">About</a>
                     </div>
+                    {% if user.is_superuser %}
                     <a href="{% url 'add_property' %}" class="btn btn-primary px-3 d-none d-lg-flex">Add Property</a>
+                    {% endif %}
                 </div>
             </nav>
         </div>
@@ -123,9 +145,9 @@
                 <div class="row g-5">
                     <div class="col-lg-3 col-md-6">
                         <h5 class="text-white mb-4">Get In Touch</h5>
-                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, New York, USA</p>
-                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+012 345 67890</p>
-                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>info@example.com</p>
+                        <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>123 Street, Nairobi, Kenya</p>
+                        <p class="mb-2"><i class="fa fa-phone-alt me-3"></i>+254794789952</p>
+                        <p class="mb-2"><i class="fa fa-envelope me-3"></i>njugunaherman8@gmail.com</p>
                         <div class="d-flex pt-2">
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-twitter"></i></a>
                             <a class="btn btn-outline-light btn-social" href=""><i class="fab fa-facebook-f"></i></a>
