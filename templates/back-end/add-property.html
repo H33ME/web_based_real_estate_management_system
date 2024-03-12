@@ -43,8 +43,8 @@
                                 <label for="price" class="form-label">Price</label>
                                 <select class="form-select" id="price" name="price" required>
                                     <option selected disabled>Select Price</option>
-                                    {% for property in properties %}
-                                        <option value="{{ property.price }}">{{ property.price }}</option>
+                                    {% for choice in PRICE_CHOICES %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -53,7 +53,7 @@
                                 <select class="form-select" id="bedrooms" name="bedrooms" required>
                                     <option selected disabled>Select Bedrooms</option>
                                     {% for choice in BEDROOM_CHOICES %}
-                                        <option value="{{ choice.0 }}">{{ choice.0 }} - {{ choice.1 }}</option>
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -63,7 +63,7 @@
                                 <select class="form-select" id="bathrooms" name="bathrooms" required>
                                     <option selected disabled>Select Bathrooms</option>
                                     {% for choice in BATHROOM_CHOICES %}
-                                        <option value="{{ choice.0 }}">{{ choice.0 }} - {{ choice.1 }}</option>
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -71,7 +71,10 @@
                                 <label for="number_available" class="form-label">Property Available </label>
                                 <input type="number" class="form-control" id="number_available" name="number_available" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Add Property</button>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Add Property</button>
+                            </div>
+
                         </form>
                     </div>
                 </div>

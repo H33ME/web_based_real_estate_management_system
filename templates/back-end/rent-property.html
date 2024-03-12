@@ -1,0 +1,87 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Rent Property
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Rent Property Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Rent Property</h2>
+                        <form action="{% url 'rent_property' property_id=property.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="property" class="form-label">Property</label>
+                                <select class="form-select" id="property" name="property" required>
+                                    <option disabled>Select Property</option>
+                                    <option value="{{ property.id }}" selected data-price="{{ property.price }}">{{ property.name }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="move_in_date" class="form-label">Move-in Date</label>
+                                <input type="date" class="form-control" id="move_in_date" name="move_in_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lease_start_date" class="form-label">Lease Start Date</label>
+                                <input type="date" class="form-control" id="lease_start_date" name="lease_start_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="lease_end_date" class="form-label">Lease End Date</label>
+                                <input type="date" class="form-control" id="lease_end_date" name="lease_end_date" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="rent_amount" class="form-label">Rent Amount</label>
+                                <div id="rent_amount_display"></div>
+                                <input type="hidden" id="rent_amount" name="rent_amount">
+                            </div>
+                            <div class="mb-3">
+                                <label for="security_deposit" class="form-label">Security Deposit</label>
+                                <input type="text" class="form-control" id="security_deposit" name="security_deposit" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="payment_frequency" class="form-label">Payment Frequency</label>
+                                <input type="text" class="form-control" id="payment_frequency" name="payment_frequency" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="additional_notes" class="form-label">Additional Notes</label>
+                                <textarea class="form-control" id="additional_notes" name="additional_notes"></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Rent Property</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rent Property Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+<script>
+$(document).ready(function() {
+    // Get the selected property on page load
+    var selectedOption = $('#property').find('option:selected');
+    var rentAmount = selectedOption.data('price');
+    $('#rent_amount_display').text(rentAmount);
+    $('#rent_amount').val(rentAmount);
+
+    // Update the price when the property selection changes
+    $('#property').change(function() {
+        selectedOption = $(this).find('option:selected');
+        rentAmount = selectedOption.data('price');
+        $('#rent_amount_display').text(rentAmount);
+        $('#rent_amount').val(rentAmount);
+    });
+});
+</script>
+{% endblock %}

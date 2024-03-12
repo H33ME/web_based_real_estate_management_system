@@ -5,7 +5,9 @@ from django.contrib import messages
 
 from property.property_handler import PropertyHandler
 from property.forms import AddNewPropertyForm, EditPropertyTypeForm, EditPropertyForm
-from property.models import BATHROOM_CHOICES, BEDROOM_CHOICES
+from property.models import BATHROOM_CHOICES, BEDROOM_CHOICES, PRICE_CHOICES
+from tenants.tenants_handler import TenantHandler
+from tenants.forms import RentPropertyForm
 # Create your views here.
 
 class PropertyBaseView(View):
@@ -32,6 +34,7 @@ class PropertyHomePageView(PropertyBaseView):
         :return:
         """
         property_handler = PropertyHandler()
+        tenant_handler = TenantHandler()
         data = {
             'page':request.GET.get('page', 1),
         }
@@ -50,9 +53,19 @@ class PropertyView(PropertyBaseView):
         """
         property_handler = PropertyHandler()
         data = {
-            'page':request.GET.get('page', 1)
+            'page':request.GET.get('page', 1),
+            'keyword':request.GET.get('keyword'),
+            'property_type':request.GET.get('property_type'),
+            'location':request.GET.get('location'),
         }
+        if request.GET.get('keyword'):
+            self.context_dict['keyword'] = request.GET.get('keyword')
+        if request.GET.get('property_type'):
+            self.context_dict['property_type'] = request.GET.get('property_type')
+        if request.GET.get('location'):
+            self.context_dict['location'] = request.GET.get('location')
         self.context_dict['properties'] = property_handler.get_all_property(data)
+        self.context_dict['property_types'] = property_handler.get_all_property_types(data)
         return render(request, 'back-end/property.html', self.context_dict)
 
 class AddNewPropertyView(PropertyBaseView):
@@ -72,6 +85,7 @@ class AddNewPropertyView(PropertyBaseView):
         self.context_dict['properties'] = property_handler.get_all_property(data)
         self.context_dict['BEDROOM_CHOICES'] = BEDROOM_CHOICES
         self.context_dict['BATHROOM_CHOICES'] = BATHROOM_CHOICES
+        self.context_dict['PRICE_CHOICES'] = PRICE_CHOICES
         self.context_dict['form'] = AddNewPropertyForm()
         return render(request, 'back-end/add-property.html', self.context_dict)
 
@@ -193,6 +207,7 @@ class PropertyEditPropertyView(PropertyBaseView):
         self.context_dict['property_id'] = property_id
         self.context_dict['BATHROOM_CHOICES'] = BATHROOM_CHOICES
         self.context_dict['BEDROOM_CHOICES'] = BEDROOM_CHOICES
+        self.context_dict['PRICE_CHOICES'] = PRICE_CHOICES
         return render(request, 'back-end/edit-property.html', self.context_dict)
 
     def post(self, request, property_id, *args, **kwargs):
@@ -213,8 +228,6 @@ class PropertyEditPropertyView(PropertyBaseView):
             return redirect(reverse('property'))
         else:
             self.context_dict['form'] = form
-            import pdb
-            pdb.set_trace()
             return render(request, 'back-end/edit-property.html', self.context_dict)
 
 class PropertyDeletePropertyTypeView(PropertyBaseView):
@@ -236,3 +249,43 @@ class PropertyDeletePropertyView(PropertyBaseView):
         property_handler.delete_property(data)
         messages.success(request, "Property has been deleted successfully.")
         return redirect(reverse('property'))
+
+class TenantRentPropertyView(PropertyBaseView):
+    def get(self, request,property_id, *args, **kwargs):
+        data = {
+            'page':request.GET.get('page', 1),
+            'property_id':property_id,
+        }
+        property_handler = PropertyHandler()
+        tenant_handler = TenantHandler()
+        self.context_dict['form'] = RentPropertyForm()
+        self.context_dict['properties'] = property_handler.get_all_property(data)
+        self.context_dict['tenant_id'] = request.user.tenant.id
+        self.context_dict['property_id'] = property_id
+        self.context_dict['property'] = property_handler.get_property_by_id(data)
+        return render(request, 'back-end/rent-property.html', self.context_dict)
+
+    def post(self, request, property_id,  *args, **kwargs):
+        tenant_handler = TenantHandler()
+        form = RentPropertyForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['tenant_id'] = request.user.tenant.id
+            data['property_id'] = property_id
+            tenant_handler.tenant_rent_property(data)
+            messages.success(request, 'property has been rented successfully.')
+            return redirect(reverse('home'))
+        else:
+            self.context_dict['form'] = form
+            import pdb
+            pdb.set_trace()
+            return render(request, "back-end/rent-property.html", self.context_dict)
+
+class TenantPropertyRentedView(PropertyBaseView):
+    def get(self, request, *args, **kwargs):
+        tenant_handler = TenantHandler()
+        data = {
+            'tenant_id':request.user.tenant.id,
+        }
+        self.context_dict['properties_rented'] = tenant_handler.get_all_property_rented(data)
+        return render(request, 'back-end/property-rented.html', self.context_dict)

@@ -4,7 +4,8 @@ from property.views import PropertyHomePageView, PropertyView,\
     AddNewPropertyView, PropertyAboutView, \
     PropertyTypeView, PropertyAddPropertyTypeView, \
     PropertyEditPropertyTypeView, PropertyEditPropertyView, \
-    PropertyDeletePropertyTypeView, PropertyDeletePropertyView
+    PropertyDeletePropertyTypeView, PropertyDeletePropertyView, \
+    TenantRentPropertyView, TenantPropertyRentedView
 
 urlpatterns = [
     path('', PropertyHomePageView.as_view(), name = 'home'),
@@ -16,5 +17,7 @@ urlpatterns = [
     path('property_type/edit_property_type/<int:property_type_id>/', PropertyEditPropertyTypeView.as_view(), name = 'edit_property_type'),
     path('property/edit_property/<int:property_id>/', PropertyEditPropertyView.as_view(), name = 'edit_property'),
     path('property_type/delete_property_type/<int:property_type_id>/', PropertyDeletePropertyTypeView.as_view(), name = 'delete_property_type'),
-    path('property/delete_property/<int:property_id>/', PropertyDeletePropertyView.as_view(), name = 'delete_property')
+    path('property/delete_property/<int:property_id>/', PropertyDeletePropertyView.as_view(), name = 'delete_property'),
+    path('property/rent_property/<int:property_id>/', TenantRentPropertyView.as_view(), name = 'rent_property'),
+    path('property/property_rented/', TenantPropertyRentedView.as_view(), name = 'property_rented')
 ]

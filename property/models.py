@@ -10,7 +10,7 @@ PRICE_CHOICES = [
 ]
 
 BEDROOM_CHOICES = [
-    (0, 'Single Room'),
+    (0, '0 Bedroom'),
     (1, '1 Bedroom'),
     (2, '2 Bedrooms'),
     (3, '3 Bedrooms'),
@@ -18,7 +18,7 @@ BEDROOM_CHOICES = [
 ]
 
 BATHROOM_CHOICES = [
-    (0, 'Single Room'),
+    (0, '0 Bedroom'),
     (1, '1 Bathroom'),
     (2, '2 Bathrooms'),
     (3, '3 Bathrooms'),
@@ -73,13 +73,14 @@ class PropertyManager:
         }
         """
         return Property.objects.create(
-            property_type_id=data.get('property_type_id'),
+            property_type=data.get('property_type'),
             name = data.get('name'),
             description = data.get('description'),
             price=data.get('price'),
             bedrooms=data.get('bedrooms'),
             bathrooms=data.get('bathrooms'),
-            location = data.get('location')
+            location = data.get('location'),
+            number_available = data.get('number_available')
         )
 
     def get_all_property(self, data):
@@ -109,30 +110,20 @@ class PropertyManager:
         }
         :return:
         """
-        filters = {}
-        # Property search logic
-        keyword = data.get('keyword')
-        property_type_id = data.get('property_type')
-        location_id = data.get('location')
+        filters = Q()
 
-        # Use Q objects to build a complex query based on selected values
-        query = Q()
+        if data.get('keyword'):
+             filters &= Q(name__icontains=data.get('keyword')) | Q(description__icontains=data.get('keyword'))
 
-        if keyword:
-            query &= Q(title__icontains=keyword) | Q(description__icontains=keyword)
+        if data.get("property_type"):
+             filters &= Q(property_type_id=data.get("property_type"))
 
-        if property_type_id:
-            query &= Q(property_type__id=property_type_id)
+        if data.get("location"):
+             filters &= Q(location=data.get("location"))
 
-        if location_id:
-            query &= Q(location__id=location_id)
-
-        # Add the constructed query to the filters
-        if query:
-            filters.update({'query': query})
         if data.get('name'):
             filters['name__icontains'] = data.get('name')
-        return Property.objects.filter(**filters).order_by('-created_at')
+        return Property.objects.filter(filters).order_by('-created_at')
 
     def edit_property(self, data):
         """
@@ -153,6 +144,7 @@ class PropertyManager:
         edit_property_by_id.bathrooms = data.get('bathrooms')
         edit_property_by_id.bedrooms = data.get('bedrooms')
         edit_property_by_id.location = data.get('location')
+        edit_property_by_id.number_available = data.get('number_available')
         edit_property_by_id.save()
         return edit_property_by_id
 

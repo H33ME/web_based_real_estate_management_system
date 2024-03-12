@@ -28,7 +28,9 @@
                 <p><i class="fa fa-check text-primary me-3"></i>Property Listing: Easily list and showcase properties with detailed descriptions, photos, and pricing information.</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Tenant Management: Efficiently manage tenant applications, lease agreements, and communicate with tenants.</p>
                 <p><i class="fa fa-check text-primary me-3"></i>Financial Tracking: Monitor property financials, including rent payments, expenses, and generate reports.</p>
+                {% if user.is_authenticated %}
                 <a class="btn btn-primary py-3 px-5 mt-3" href="{% url 'property' %}">View Available Property</a>
+                {% endif %}
             </div>
         </div>
     </div>

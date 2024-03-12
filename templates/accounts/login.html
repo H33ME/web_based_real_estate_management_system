@@ -1,0 +1,46 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Login
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Login Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Login</h2>
+                        <form action="{% url 'login' %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input class="form-control" id="username" name="username" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Login</button>
+                            </div>
+                            <div class="text-center">
+                            <a href="{% url 'register_tenant' %}">Don't have an account? Register here.</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Login Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+{% endblock %}
