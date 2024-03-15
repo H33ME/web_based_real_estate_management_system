@@ -1,0 +1,58 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+{% block title %}
+   Add Property Rent Payment
+{% endblock %}
+{% block page_style %}
+
+{% endblock %}
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Add Property Rent Payment Form Start -->
+        <div class="container-xxl py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <h2 class="text-center mb-4">Add Property Rent Payment</h2>
+                        <form action="{% url 'add_property_rent_payment' property_rented_id=property_rented.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="rent_property" class="form-label">Property Rented</label>
+                                <select class="form-select" id="rent_property" name="rent_property" required>
+                                    <option disabled>Select Property</option>
+                                    <option value="{{ property_rented.id }}" selected data-price="{{ property_rented.property.price }}">{{ property_rented.property.name }}</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="amount_paid" class="form-label">Amount Paid</label>
+                                <input type="number" class="form-control" id="amount_paid" name="amount_paid" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="payment_method" class="form-label">Payment Method</label>
+                                <select class="form-select" id="payment_method" name="payment_method" required>
+                                    <option selected disabled>Select Payment Method</option>
+                                    {% for choice in payment_method_choices %}
+                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary w-100">Add Property Rent Payment</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Add Property Rent Payment Form End -->
+    </div>
+</body>
+{% endblock %}
+{% block page_scripts %}
+
+</script>
+{% endblock %}

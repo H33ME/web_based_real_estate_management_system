@@ -8,6 +8,9 @@ from property.forms import AddNewPropertyForm, EditPropertyTypeForm, EditPropert
 from property.models import BATHROOM_CHOICES, BEDROOM_CHOICES, PRICE_CHOICES
 from tenants.tenants_handler import TenantHandler
 from tenants.forms import RentPropertyForm
+from payments.payments_handler import PaymentHandler
+from payments.forms import CreatePropertyRentedPaymentForm
+from payments.models import TransactionChoices, PaymentMethodChoices
 # Create your views here.
 
 class PropertyBaseView(View):
@@ -277,8 +280,6 @@ class TenantRentPropertyView(PropertyBaseView):
             return redirect(reverse('home'))
         else:
             self.context_dict['form'] = form
-            import pdb
-            pdb.set_trace()
             return render(request, "back-end/rent-property.html", self.context_dict)
 
 class TenantPropertyRentedView(PropertyBaseView):
@@ -289,3 +290,93 @@ class TenantPropertyRentedView(PropertyBaseView):
         }
         self.context_dict['properties_rented'] = tenant_handler.get_all_property_rented(data)
         return render(request, 'back-end/property-rented.html', self.context_dict)
+
+class TenantsRentedPropertyView(PropertyBaseView):
+    def get(self, request, *args, **kwargs):
+        tenant_handler = TenantHandler()
+        data = {
+            'page':request.GET.get('page', 1),
+        }
+        self.context_dict['tenants'] = tenant_handler.get_all_tenants(data)
+        return render(request, 'back-end/tenants.html', self.context_dict)
+
+class AddPropertyRentPaymentView(PropertyBaseView):
+    def get(self, request,property_rented_id, *args, **Kwargs):
+        tenant_handler = TenantHandler()
+        data = {
+            'tenant_id':request.user.tenant.id,
+            'property_rented_id':property_rented_id,
+        }
+        self.context_dict['form'] = CreatePropertyRentedPaymentForm()
+        self.context_dict['tenant_id'] = request.user.tenant.id
+        self.context_dict['property_rented_id'] = property_rented_id
+        self.context_dict['properties_rented'] = tenant_handler.get_all_property_rented(data)
+        self.context_dict['property_rented'] = tenant_handler.get_property_rented_by_id(data)
+        self.context_dict['transaction_choices'] = TransactionChoices.choices
+        self.context_dict['payment_method_choices'] = PaymentMethodChoices.choices
+        return render(request, 'back-end/add-property-rent-payment.html', self.context_dict)
+    def post(self, request,property_rented_id, *args, **kwargs):
+        payment_handler = PaymentHandler()
+        form = CreatePropertyRentedPaymentForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            data['property_rented_id'] = property_rented_id
+            data['tenant_id'] = request.user.tenant.id
+            payment_handler.create_rent_payment(data)
+            messages.success(request, 'Property rented payment has been made successfully')
+            return redirect(reverse('property_rented'))
+        else:
+            self.context_dict['form'] = form
+            import pdb
+            pdb.set_trace()
+            return render(request, 'back-end/add-property-rent-payment.html', self.context_dict)
+
+class PropertyRentPaymentView(PropertyBaseView):
+    def get(self, request, *args, **kwargs):
+        payment_handler = PaymentHandler()
+        data = {
+            'page':request.GET.get('page', 1),
+        }
+        self.context_dict['rent_payments'] = payment_handler.get_all_rent_payments(data)
+        self.context_dict['transaction_choices'] = TransactionChoices.choices
+        return render(request, 'back-end/rent-payments-detail.html', self.context_dict)
+
+class EditPropertyRentPaymentTransactionStatusView(PropertyBaseView):
+    def post(self, request,rent_payment_id, *args, **kwargs):
+        """
+        This filters the products table
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        payment_handler = PaymentHandler()
+        transaction_status = request.POST.get('transaction_status')
+        data = {
+            'rent_payment_id':rent_payment_id,
+            'transaction_status': transaction_status,
+            'transaction_choices': TransactionChoices.choices,
+        }
+        payment_handler.edit_property_rent_transaction_status(data)
+        messages.success(request, 'Transaction status has been updated successfully')
+        return redirect(reverse('property_rent_details'))
+
+class PropertyDeletePropertyRentPaymentView(PropertyBaseView):
+    def get(self, request,rent_payment_id, *args, **kwargs):
+        payment_handler = PaymentHandler()
+        data = {
+            'rent_payment_id':rent_payment_id
+        }
+        payment_handler.delete_tenant_rent_payment(data)
+        messages.success(request, 'Tenants rent payment was deleted successfully')
+        return redirect(reverse('property_rent_details'))
+
+class PropertyDeleteTenantView(PropertyBaseView):
+    def get(self, request, tenant_id, *args, **kwargs):
+        tenant_handler = TenantHandler()
+        data = {
+            'tenant_id':tenant_id,
+        }
+        tenant_handler.delete_tenant(data)
+        return redirect(reverse('tenants'))

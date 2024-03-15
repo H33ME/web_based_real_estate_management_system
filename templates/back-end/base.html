@@ -80,6 +80,8 @@
                                     <a href="{% url 'property' %}" class="dropdown-item {% if request.path == '/property/' %}active{% endif %}">Property List</a>
                                     {% if user.is_superuser %}
                                         <a href="{% url 'property_type' %}" class="dropdown-item {% if request.path == '/property_type/' %}active{% endif %}">Property Type</a>
+                                        <a href="{% url 'tenants' %}" class="dropdown-item {% if request.path == '/tenants/' %}active{% endif %}">Tenants</a>
+                                        <a href="{% url 'property_rent_details' %}" class="dropdown-item {% if request.path == '/property_rent_details/' %}active{% endif %}">Property Rent Details</a>
                                     {% endif %}
                                     {% if user.tenant %}
                                         <a href="{% url 'property_rented' %}" class="dropdown-item {% if request.path == '/property_rented/' %}active{% endif %}">Property Rented</a>
