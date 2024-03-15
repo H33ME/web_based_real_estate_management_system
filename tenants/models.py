@@ -226,3 +226,18 @@ class TenantManager:
         """
         tenant = Tenant.objects.get(id=data.get('tenant_id'))
         return RentProperty.objects.filter(tenant = tenant)
+
+    def get_property_rented_by_id(self, data):
+        """
+        This method returns all property rented per id
+        :param data: {
+            'property_rented_id':''
+        }
+        :return:
+        """
+        return RentProperty.objects.get(id=data.get('property_rented_id'))
+
+    def delete_tenant(self, data):
+        tenant = Tenant.objects.get(id = data.get('tenant_id'))
+        tenant.delete()
+        return tenant

@@ -1,0 +1,166 @@
+{% extends "back-end/base.html" %}
+{% load static %}
+
+{% block title %}
+    Rent Payments
+{% endblock %}
+
+{% block page_style %}
+<style>
+    .container-xxl {
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+        border-radius: 5px;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        padding: 10px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.125);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px;
+        border: 1px solid #dee2e6;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+        text-align: left;
+    }
+
+    .table tr:nth-child(even) {
+        background-color: #f5f5f5;
+    }
+
+    .table tr:hover {
+        background-color: #f0f0f0;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Rent Payments Information Start -->
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">Rent Payments Information</div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Property Name</th>
+                                            <th>Tenant Name</th>
+                                            <th>Amount Paid</th>
+                                            <th>Payment Date</th>
+                                            <th>Payment Method</th>
+                                            <th>Payment Reference</th>
+                                            <th>Transaction Status</th>
+                                            <th>Options</th>
+                                        </tr>
+                                    </thead>
+                                    {% for payment in rent_payments %}
+                                    <tbody>
+
+                                        <tr>
+                                            <td>{{ payment.id }}</td>
+                                            <td>{{ payment.rent_property.property.name }}</td>
+                                            <td>{{ payment.rent_property.tenant.first_name }}</td>
+                                            <td>{{ payment.amount_paid }}</td>
+                                            <td>{{ payment.payment_date }}</td>
+                                            <td>{{ payment.payment_method }}</td>
+                                            <td>{{ payment.payment_reference }}</td>
+                                            <td>{{ payment.transaction_status }}</td>
+                                            <td>
+                                        <div class="d-flex flex-column">
+                                            <button type="button" class="btn btn-primary mb-2" data-toggle="modal" data-target="#updateTransactionStatusModal{{ payment.id }}">
+                                                <i class="fa fa-edit" title="Update Transaction Status"></i> Update Transaction Status
+                                            </button>
+                                            <a href="{% url 'delete_property_rent_payment' rent_payment_id=payment.id %}" class="btn btn-danger">
+                                                <i class="fa fa-edit" title="Delete Property Rent Payment"></i> Delete
+                                            </a>
+                                        </div>
+                                    </td>
+                                        </tr>
+                                        <!-- Update Transaction Status Modal -->
+                                        <div class="modal fade" id="updateTransactionStatusModal{{ payment.id }}" tabindex="-1" role="dialog" aria-labelledby="updateTransactionStatusModalLabel{{ payment.id }}" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="updateTransactionStatusModalLabel{{ payment.id }}">Update Transaction Status</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="updateTransactionStatusForm{{ payment.id }}" method="POST" action="{% url 'update_property_rent_payment_transaction_status' rent_payment_id=payment.id %}">
+                                                            {% csrf_token %}
+                                                            <div class="mb-3">
+                                                                <label for="transaction_status" class="form-label">Transaction Choices</label>
+                                                                <select class="form-select" id="transaction_status" name="transaction_status" required>
+                                                                    {% for choice in transaction_choices %}
+                                                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                                                    {% endfor %}
+                                                                </select>
+                                                            </div>
+                                                            <div class="d-grid">
+                                                                <button type="submit" class="btn btn-primary w-100">Update</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% empty %}
+                                <div class="col-12 text-center">
+                                    <p class="text-muted">No rent payment found.</p>
+                                </div>
+
+                                    {% endfor %}
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Rent Payments Information End -->
+    </div>
+
+    {% block page_scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% endblock %}
+</body>
+{% endblock %}

@@ -78,13 +78,15 @@ class TenantHandler:
         :return:
         """
         return self.tenant_manager.get_all_property_rented(data)
-
-    def filter_property_rented(self, data: dict):
+    def get_property_rented_by_id(self, data):
         """
-        This method filters property rented
+        This method returns all property rented per id
         :param data: {
-            'property_id':'',
+            'property_rented_id':''
         }
         :return:
         """
-        return self.tenant_manager.filter_property_rented(data)
+        return self.tenant_manager.get_property_rented_by_id(data)
+
+    def delete_tenant(self, data):
+        return self.tenant_manager.delete_tenant(data)

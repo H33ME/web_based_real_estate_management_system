@@ -84,6 +84,7 @@
                                             <th>Security Deposit</th>
                                             <th>Payment Frequency</th>
                                             <th>Additional Notes</th>
+                                            <th>Option</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,6 +100,16 @@
                                             <td>{{ property.security_deposit }}</td>
                                             <td>{{ property.payment_frequency }}</td>
                                             <td>{{ property.additional_notes }}</td>
+                                            <td>
+
+                                                <a style="width: 100%"
+                                                href="{% url 'add_property_rent_payment' property_rented_id=property.id %}"
+                                                class="btn btn-primary"
+                                                >
+                                                 <i class="fa fa-edit" title="Add property rent payment"></i>Pay Rent
+                                             </a>
+                                             
+                                            </td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
