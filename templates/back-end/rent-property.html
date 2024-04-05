@@ -26,6 +26,16 @@
                                 </select>
                             </div>
                             <div class="mb-3">
+                                <label for="room_number" class="form-label">Room Number</label>
+                                <select class="form-select" id="room_number" name="room_number" required>
+                                    <option disabled selected>Select Room Number</option>
+                                    {% for room_number in room_numbers %}
+                                        <option value="{{ room_number }}">{{ room_number }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="move_in_date" class="form-label">Move-in Date</label>
                                 <input type="date" class="form-control" id="move_in_date" name="move_in_date" required>
                             </div>

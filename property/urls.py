@@ -9,7 +9,6 @@ from property.views import PropertyHomePageView, PropertyView,\
     TenantsRentedPropertyView, AddPropertyRentPaymentView,\
     PropertyRentPaymentView, EditPropertyRentPaymentTransactionStatusView,\
     PropertyDeletePropertyRentPaymentView, PropertyDeleteTenantView
-
 urlpatterns = [
     path('', PropertyHomePageView.as_view(), name = 'home'),
     path('property/', PropertyView.as_view(), name = 'property'),
@@ -28,5 +27,5 @@ urlpatterns = [
     path('property/property_rented/property_rent_details', PropertyRentPaymentView.as_view(), name = 'property_rent_details'),
     path('property/property_rented/update_property_rent_payment_transaction_status/<int:rent_payment_id>/', EditPropertyRentPaymentTransactionStatusView.as_view(), name = 'update_property_rent_payment_transaction_status'),
     path('property/property_rented/delete_property_rent_payment/<int:rent_payment_id>/', PropertyDeletePropertyRentPaymentView.as_view(), name = 'delete_property_rent_payment'),
-    path('property/property_rented/tenants/delete_tenant/<int:tenant_id>/', PropertyDeleteTenantView.as_view(), name = 'delete_tenant')
+    path('property/property_rented/tenants/delete_tenant/<int:tenant_id>/', PropertyDeleteTenantView.as_view(), name = 'delete_tenant'),
 ]

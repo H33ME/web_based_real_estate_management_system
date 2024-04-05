@@ -33,6 +33,10 @@ class RentPayment(models.Model):
     def __str__(self):
         return f"Payment of sh {self.amount_paid} for {self.rent_property.property.name} rented by {self.rent_property.tenant.first_name}"
 
+    @property
+    def balance(self):
+        return int(self.rent_property.property.price) - int(self.amount_paid)
+
 class PaymentManager:
      def create_rent_payment(self, data):
           return RentPayment.objects.create(

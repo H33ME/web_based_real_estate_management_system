@@ -90,3 +90,9 @@ class TenantHandler:
 
     def delete_tenant(self, data):
         return self.tenant_manager.delete_tenant(data)
+
+    def notify_tenant_to_pay_rent(self, data):
+        return self.tenant_manager.notify_tenant_to_pay_rent(data)
+
+    def generate_room_numbers(self, data):
+        return self.tenant_manager.generate_room_numbers(data)

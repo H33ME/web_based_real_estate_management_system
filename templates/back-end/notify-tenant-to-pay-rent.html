@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rent Payment Update Required</title>
+</head>
+<body>
+    Dear, {{ tenant.first_name }},
+    <h2>Rent Payment Required Notification</h2>
+    <p>A rent payment for property rented named <b>{{ property.name }}</b> needs to be updated. Please visit the landlord's office to complete the payment transaction for the property rented.
+    <br/>
+
+    <h2>PROPERTY RENTED DETAILS</h2>
+    <table>
+        <thead>
+            <tr>
+            <th>ID</th>
+            <th>Property Name</th>
+            <th>Tenant Name</th>
+            <th>Move-in Date</th>
+            <th>Lease Start Date</th>
+            <th>Lease End Date</th>
+            <th>Rent Amount</th>
+            <th>Security Deposit</th>
+            <th>Payment Frequency</th>
+            <th>Additional Notes</th>
+
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+
+            <td>{{ rent_property.tenant.id }}</td>
+            <td>{{ rent_property.property.name }}</td>
+            <td>{{ rent_property.tenant.first_name }} {{ rent_property.tenant.last_name }}</td>
+            <td>{{ rent_property.move_in_date }}</td>
+            <td>{{ rent_property.lease_start_date }}</td>
+            <td>{{ rent_property.lease_end_date }}</td>
+            <td>{{ rent_property.rent_amount }}</td>
+            <td>{{ rent_property.security_deposit }}</td>
+            <td>{{ rent_property.payment_frequency }}</td>
+            <td>{{ rent_property.additional_notes }}</td>
+        </tr>
+        </tbody>
+        </table>
+</body>
+</html>
