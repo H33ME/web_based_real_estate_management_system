@@ -81,6 +81,7 @@
                                             <th>Property Name</th>
                                             <th>Tenant Name</th>
                                             <th>Amount Paid</th>
+                                            <th>Balance</th>
                                             <th>Payment Date</th>
                                             <th>Payment Method</th>
                                             <th>Payment Reference</th>
@@ -96,6 +97,10 @@
                                             <td>{{ payment.rent_property.property.name }}</td>
                                             <td>{{ payment.rent_property.tenant.first_name }}</td>
                                             <td>{{ payment.amount_paid }}</td>
+                                            <td>
+                                                {{ payment.balance }}
+                                            </td>
+
                                             <td>{{ payment.payment_date }}</td>
                                             <td>{{ payment.payment_method }}</td>
                                             <td>{{ payment.payment_reference }}</td>

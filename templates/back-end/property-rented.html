@@ -75,6 +75,7 @@
                                     <thead>
                                         <tr>
                                             <th>id</th>
+                                            <th>Room Number</th>
                                             <th>Property Name</th>
                                             <th>Tenant Name</th>
                                             <th>Move-in Date</th>
@@ -91,6 +92,7 @@
                                         {% for property in properties_rented %}
                                         <tr>
                                             <td>{{ property.tenant.id }}</td>
+                                            <td>{{ property.room_number }}</td>
                                             <td>{{ property.property.name }}</td>
                                             <td>{{ property.tenant.first_name }} {{ property.tenant.last_name }}</td>
                                             <td>{{ property.move_in_date }}</td>
@@ -108,7 +110,7 @@
                                                 >
                                                  <i class="fa fa-edit" title="Add property rent payment"></i>Pay Rent
                                              </a>
-                                             
+
                                             </td>
                                         </tr>
                                         {% endfor %}

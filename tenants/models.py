@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.db.models import Q
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from real_estate_management_project.settings import NOREPLY_MAIL
 
 from property.models import Property, DEFAULT_STRING_VALUE
 # Create your models here.
@@ -38,6 +41,7 @@ class Tenant(models.Model):
 class RentProperty(models.Model):
     property = models.ForeignKey(Property, on_delete= models.CASCADE, related_name = 'property_rented')
     tenant = models.ForeignKey(Tenant, on_delete = models.CASCADE, related_name = 'tenant_renting_property')
+    room_number = models.CharField(max_length = 50)
     move_in_date = models.DateField(null=False, blank=False)
     lease_start_date = models.DateField(null=False, blank=False)
     lease_end_date = models.DateField(null=False, blank=False)
@@ -198,6 +202,7 @@ class TenantManager:
                 move_in_date=move_in_date,
                 lease_start_date=lease_start_date,
                 lease_end_date=lease_end_date,
+                room_number=data.get('room_number'),
                 payment_frequency = data.get('payment_frequency'),
                 additional_notes = data.get('additional_notes'),
                 security_deposit = data.get('security_deposit'),
@@ -241,3 +246,25 @@ class TenantManager:
         tenant = Tenant.objects.get(id = data.get('tenant_id'))
         tenant.delete()
         return tenant
+
+    def notify_tenant_to_pay_rent(self, data):
+        property = Property.objects.get(id=data.get('property_id'))
+        rent_property = RentProperty.objects.get(property = property)
+        tenant = Tenant.objects.get(id=data.get('tenant_id'))
+        subject = 'Rent Payment Status Notification'
+        to_address = data.get('to_address')
+        data.update({'tenant': tenant, 'rent_property': rent_property})
+        # Render HTML template with dynamic content
+        html_message = render_to_string('back-end/notify-tenant-to-pay-rent.html', data)
+        # Send email with HTML message
+        send_mail(subject, None, NOREPLY_MAIL, [to_address], html_message=html_message)
+
+    def generate_room_numbers(self, data):
+        property = Property.objects.get(id=data.get('property_id'))
+        room_numbers = []
+
+        for i in range(1, property.number_available + 1):
+            room_number = f"{property.name} Room Number {i}"
+            room_numbers.append(room_number)
+
+        return room_numbers

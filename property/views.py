@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views import View
 from django.contrib import messages
+from django.db import transaction
 
 from property.property_handler import PropertyHandler
 from property.forms import AddNewPropertyForm, EditPropertyTypeForm, EditPropertyForm
@@ -266,6 +267,8 @@ class TenantRentPropertyView(PropertyBaseView):
         self.context_dict['tenant_id'] = request.user.tenant.id
         self.context_dict['property_id'] = property_id
         self.context_dict['property'] = property_handler.get_property_by_id(data)
+
+        self.context_dict['room_numbers'] = tenant_handler.generate_room_numbers(data)
         return render(request, 'back-end/rent-property.html', self.context_dict)
 
     def post(self, request, property_id,  *args, **kwargs):
@@ -275,9 +278,12 @@ class TenantRentPropertyView(PropertyBaseView):
             data = form.cleaned_data
             data['tenant_id'] = request.user.tenant.id
             data['property_id'] = property_id
-            tenant_handler.tenant_rent_property(data)
+            data['to_address'] = request.user.username
+            with transaction.atomic():
+                tenant_handler.tenant_rent_property(data)
+                tenant_handler.notify_tenant_to_pay_rent(data)
             messages.success(request, 'property has been rented successfully.')
-            return redirect(reverse('home'))
+            return redirect(reverse('property_rented'))
         else:
             self.context_dict['form'] = form
             return render(request, "back-end/rent-property.html", self.context_dict)
@@ -380,3 +386,4 @@ class PropertyDeleteTenantView(PropertyBaseView):
         }
         tenant_handler.delete_tenant(data)
         return redirect(reverse('tenants'))
+

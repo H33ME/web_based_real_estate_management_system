@@ -52,7 +52,7 @@ class EditTenantProfileForm(forms.ModelForm):
 class RentPropertyForm(forms.ModelForm):
     class Meta:
         model = RentProperty
-        fields = ('property', 'move_in_date', 'lease_start_date', 'lease_end_date', 'rent_amount', 'security_deposit', 'additional_notes', 'payment_frequency')
+        fields = ('property', 'move_in_date', 'lease_start_date', 'lease_end_date', 'rent_amount', 'security_deposit', 'additional_notes', 'payment_frequency', 'room_number')
 
     def __init__(self, *args, **kwargs):
         super(RentPropertyForm, self).__init__(*args, **kwargs)
