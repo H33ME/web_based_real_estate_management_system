@@ -85,5 +85,53 @@
 </body>
 {% endblock %}
 {% block page_scripts %}
+<script>
+    // Get the bedrooms and bathrooms select elements
+    const bedroomsSelect = document.getElementById('bedrooms');
+    const bathroomsSelect = document.getElementById('bathrooms');
 
+    // Add an event listener to the bedrooms select element
+    bedroomsSelect.addEventListener('change', function () {
+        // Get the selected value
+        const selectedValue = parseInt(bedroomsSelect.value);
+
+        // Clear the bathrooms select element
+        bathroomsSelect.innerHTML = '';
+
+        // Create and append the options to the bathrooms select element
+        if (selectedValue === 0) {
+            const option = document.createElement('option');
+            option.value = 0;
+            option.text = '0 Bathrooms';
+            bathroomsSelect.appendChild(option);
+            bathroomsSelect.value = 0;
+        } else {
+            for (let i = 0; i <= 3; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = i + ' Bathroom(s)';
+                bathroomsSelect.appendChild(option);
+            }
+            bathroomsSelect.selectedIndex = 0;
+        }
+    });
+</script>
+<script>
+    // Add an event listener to the form submission
+    const form = document.querySelector('form');
+    form.addEventListener('submit', function (event) {
+        // Get the value entered for Property Available
+        const numberAvailableInput = document.getElementById('number_available');
+        const numberAvailableValue = parseInt(numberAvailableInput.value);
+
+        // Check if the value is negative
+        if (numberAvailableValue < 0) {
+            // Prevent the form submission
+            event.preventDefault();
+
+            // Display a popup notification
+            alert('The value entered for Property Available should be a positive number.');
+        }
+    });
+</script>
 {% endblock %}
