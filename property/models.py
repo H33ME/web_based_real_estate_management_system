@@ -18,7 +18,7 @@ BEDROOM_CHOICES = [
 ]
 
 BATHROOM_CHOICES = [
-    (0, '0 Bedroom'),
+    (0, '0 Bathroom'),
     (1, '1 Bathroom'),
     (2, '2 Bathrooms'),
     (3, '3 Bathrooms'),
