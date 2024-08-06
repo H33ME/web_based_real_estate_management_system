@@ -6,7 +6,6 @@ from django.db import transaction
 
 from property.property_handler import PropertyHandler
 from property.forms import AddNewPropertyForm, EditPropertyTypeForm, EditPropertyForm
-from property.models import BATHROOM_CHOICES, BEDROOM_CHOICES, PRICE_CHOICES
 from tenants.tenants_handler import TenantHandler
 from tenants.forms import RentPropertyForm
 from payments.payments_handler import PaymentHandler
@@ -87,9 +86,6 @@ class AddNewPropertyView(PropertyBaseView):
         }
         self.context_dict['property_types'] = property_handler.get_all_property_types(data)
         self.context_dict['properties'] = property_handler.get_all_property(data)
-        self.context_dict['BEDROOM_CHOICES'] = BEDROOM_CHOICES
-        self.context_dict['BATHROOM_CHOICES'] = BATHROOM_CHOICES
-        self.context_dict['PRICE_CHOICES'] = PRICE_CHOICES
         self.context_dict['form'] = AddNewPropertyForm()
         return render(request, 'back-end/add-property.html', self.context_dict)
 
@@ -209,9 +205,6 @@ class PropertyEditPropertyView(PropertyBaseView):
         self.context_dict['properties'] = property_handler.get_all_property(data)
         self.context_dict['form'] = EditPropertyForm()
         self.context_dict['property_id'] = property_id
-        self.context_dict['BATHROOM_CHOICES'] = BATHROOM_CHOICES
-        self.context_dict['BEDROOM_CHOICES'] = BEDROOM_CHOICES
-        self.context_dict['PRICE_CHOICES'] = PRICE_CHOICES
         return render(request, 'back-end/edit-property.html', self.context_dict)
 
     def post(self, request, property_id, *args, **kwargs):
@@ -232,6 +225,8 @@ class PropertyEditPropertyView(PropertyBaseView):
             return redirect(reverse('property'))
         else:
             self.context_dict['form'] = form
+            import pdb
+            pdb.set_trace()
             return render(request, 'back-end/edit-property.html', self.context_dict)
 
 class PropertyDeletePropertyTypeView(PropertyBaseView):
@@ -386,4 +381,3 @@ class PropertyDeleteTenantView(PropertyBaseView):
         }
         tenant_handler.delete_tenant(data)
         return redirect(reverse('tenants'))
-
