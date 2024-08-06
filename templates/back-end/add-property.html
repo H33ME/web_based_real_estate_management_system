@@ -1,12 +1,13 @@
 {% extends "back-end/base.html" %}
 {% load static %}
 {% block title %}
-   Add Property
+Add Property
 {% endblock %}
 {% block page_style %}
 
 {% endblock %}
 {% block content %}
+
 <body>
     <div class="container-xxl bg-white p-0">
         <!-- Add Property Form Start -->
@@ -23,7 +24,7 @@
                                 <select class="form-select" id="property_type" name="property_type" required>
                                     <option selected disabled>Select Property Type</option>
                                     {% for property_type in property_types %}
-                                        <option value="{{ property_type.id }}">{{ property_type.name }}</option>
+                                    <option value="{{ property_type.id }}">{{ property_type.name }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
@@ -33,43 +34,30 @@
                             </div>
                             <div class="mb-3">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea class="form-control" name="description" id="description" rows="10" required></textarea>
+                                <textarea class="form-control" name="description" id="description" rows="10"
+                                    required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="location" class="form-label">Location</label>
                                 <input type="text" class="form-control" id="location" name="location" required>
                             </div>
                             <div class="mb-3">
-                                <label for="price" class="form-label">Price</label>
-                                <select class="form-select" id="price" name="price" required>
-                                    <option selected disabled>Select Price</option>
-                                    {% for choice in PRICE_CHOICES %}
-                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                    {% endfor %}
-                                </select>
+                                <label for="price" class="form-label">Price </label>
+                                <input type="number" class="form-control" id="price" name="price" required>
                             </div>
                             <div class="mb-3">
-                                <label for="bedrooms" class="form-label">Bedrooms</label>
-                                <select class="form-select" id="bedrooms" name="bedrooms" required onchange="updateBathrooms()">
-                                    <option selected disabled>Select Bedrooms</option>
-                                    {% for choice in BEDROOM_CHOICES %}
-                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                    {% endfor %}
-                                </select>
+                                <label for="bedrooms" class="form-label">Bedrooms </label>
+                                <input type="number" class="form-control" id="bedrooms" name="bedrooms" required>
                             </div>
 
                             <div class="mb-3">
-                                <label for="bathrooms" class="form-label">Bathrooms</label>
-                                <select class="form-select" id="bathrooms" name="bathrooms" required>
-                                    <option selected disabled>Select Bathrooms</option>
-                                    {% for choice in BATHROOM_CHOICES %}
-                                        <option value="{{ choice.0 }}">{{ choice.1 }}</option>
-                                    {% endfor %}
-                                </select>
+                                <label for="bathrooms" class="form-label">Bathrooms </label>
+                                <input type="number" class="form-control" id="bathrooms" name="bathrooms" required>
                             </div>
                             <div class="mb-3">
                                 <label for="number_available" class="form-label">Property Available </label>
-                                <input type="number" class="form-control" id="number_available" name="number_available" required>
+                                <input type="number" class="form-control" id="number_available" name="number_available"
+                                    required>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary w-100">Add Property</button>
@@ -87,54 +75,58 @@
 {% endblock %}
 {% block page_scripts %}
 <script>
-    // Get the bedrooms and bathrooms select elements
-    const bedroomsSelect = document.getElementById('bedrooms');
-    const bathroomsSelect = document.getElementById('bathrooms');
+    // Get the bedrooms and bathrooms input elements
+    const bedroomsInput = document.getElementById('bedrooms');
+    const bathroomsInput = document.getElementById('bathrooms');
 
-    // Add an event listener to the bedrooms select element
-    bedroomsSelect.addEventListener('change', function () {
+    // Add an event listener to the bedrooms input element
+    bedroomsInput.addEventListener('input', function () {
         // Get the selected value
-        const selectedValue = parseInt(bedroomsSelect.value);
+        const selectedValue = parseInt(bedroomsInput.value);
 
-        // Clear the bathrooms select element
-        bathroomsSelect.innerHTML = '';
-
-        // Create and append the options to the bathrooms select element
-        if (selectedValue === 0) {
-            const option = document.createElement('option');
-            option.value = 0;
-            option.text = '0 Bathrooms';
-            bathroomsSelect.appendChild(option);
-            bathroomsSelect.value = 0;
-        } else {
-            for (let i = 0; i <= 3; i++) {
-                const option = document.createElement('option');
-                option.value = i;
-                option.text = i + ' Bathroom(s)';
-                bathroomsSelect.appendChild(option);
-            }
-            bathroomsSelect.selectedIndex = 0;
-        }
+        // Set the maximum value of bathrooms to be the same as the number of bedrooms
+        bathroomsInput.max = selectedValue;
     });
-</script>
 
-<script>
     // Add an event listener to the form submission
     const form = document.querySelector('form');
     form.addEventListener('submit', function (event) {
-        // Get the value entered for Property Available
+        // Get the values of bedrooms and bathrooms
+        const bedroomValue = parseInt(bedroomsInput.value);
+        const bathroomValue = parseInt(bathroomsInput.value);
+
+        // Check if the number of bathrooms exceeds the number of bedrooms
+        if (bathroomValue > bedroomValue) {
+            event.preventDefault();
+            alert('The number of bathrooms cannot exceed the number of bedrooms.');
+        }
+
+        // Check if the value entered for Property Available is negative
         const numberAvailableInput = document.getElementById('number_available');
         const numberAvailableValue = parseInt(numberAvailableInput.value);
-
-        // Check if the value is negative
         if (numberAvailableValue < 0) {
-            // Prevent the form submission
             event.preventDefault();
-
-            // Display a popup notification
             alert('The value entered for Property Available should be a positive number.');
+        }
+
+        // Check if the values for bedroom, price, or bathroom are negative
+        const priceInput = document.getElementById('price');
+        const priceValue = parseInt(priceInput.value);
+
+        if (bedroomValue < 0) {
+            event.preventDefault();
+            alert('The value entered for Bedroom should be a positive number.');
+        }
+
+        if (priceValue < 0) {
+            event.preventDefault();
+            alert('The value entered for Price should be a positive number.');
+        }
+
+        if (bathroomValue < 0) {
+            event.preventDefault();
+            alert('The value entered for Bathroom should be a positive number.');
         }
     });
 </script>
-
 {% endblock %}

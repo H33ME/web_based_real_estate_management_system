@@ -2,28 +2,6 @@ from django.db import models
 from django.db.models import Q
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 DEFAULT_STRING_VALUE = 'NOT AVAILABLE'
-PRICE_CHOICES = [
-    (5000, 'Sh. 5000'),
-    (10000, 'Sh. 10,000'),
-    ( 30000,'Sh. 30000'),
-    (50000, 'Sh. 50000')
-]
-
-BEDROOM_CHOICES = [
-    (0, '0 Bedroom'),
-    (1, '1 Bedroom'),
-    (2, '2 Bedrooms'),
-    (3, '3 Bedrooms'),
-    # Add more options as needed
-]
-
-BATHROOM_CHOICES = [
-    (0, '0 Bathroom'),
-    (1, '1 Bathroom'),
-    (2, '2 Bathrooms'),
-    (3, '3 Bathrooms'),
-    # Add more options as needed
-]
 
 # Create your models here.
 class PropertyType(models.Model):
@@ -46,9 +24,9 @@ class Property(models.Model):
     description = models.TextField(max_length = 1000, default = DEFAULT_STRING_VALUE, null = True, blank = True)
     number_available = models.PositiveIntegerField(default=0, verbose_name='properties available',
                                         help_text='This is the number of property available')
-    price = models.IntegerField(choices=PRICE_CHOICES,)
-    bedrooms = models.IntegerField(choices=BEDROOM_CHOICES)
-    bathrooms = models.IntegerField(choices=BATHROOM_CHOICES)
+    price = models.IntegerField()
+    bedrooms = models.IntegerField()
+    bathrooms = models.IntegerField()
     location = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -141,6 +119,7 @@ class PropertyManager:
         edit_property_by_id = Property.objects.get(id=data.get('property_id'))
         edit_property_by_id.name = data.get('name')
         edit_property_by_id.description = data.get('description')
+        edit_property_by_id.price = data.get('price')
         edit_property_by_id.bathrooms = data.get('bathrooms')
         edit_property_by_id.bedrooms = data.get('bedrooms')
         edit_property_by_id.location = data.get('location')
